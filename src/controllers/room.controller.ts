@@ -12,7 +12,12 @@ export const roomController = (socket: Socket) => {
   );
 
   // ====> CHECK ROOM
-  socket.on("check-room", ({ roomId }) => {
+  socket.on("check-room", ({ roomId }: { roomId: string }) => {
     checkRoomService(roomId, socket);
   });
+
+  socket.on(
+    "get-room",
+    ({ roomId, playerId }: { roomId: string; playerId: string }) => {},
+  );
 };

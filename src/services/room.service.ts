@@ -3,7 +3,7 @@ import { generateRoomId } from "../utils/generateRoomId";
 import { rooms } from "../stores/room.store";
 import { PLAYER_COLORS } from "../utils/playerColors";
 
-// ==== > CREATE ROOM
+// ====> CREATE ROOM
 export const createRoomService = (
   socket: Socket,
   playerName: string,
@@ -34,6 +34,7 @@ export const createRoomService = (
   });
 };
 
+// ====> CHECK ROOM
 export const checkRoomService = (roomId: string, socket: Socket) => {
   if (!rooms[roomId]) {
     socket.emit("room-not-found", {
@@ -44,4 +45,24 @@ export const checkRoomService = (roomId: string, socket: Socket) => {
   socket.emit("room-is-found", {
     message: `Room with roomId ${roomId} is found`,
   });
+};
+
+// ====> GET ROOM
+export const getRoomService = (
+  roomId: string,
+  playerId: string,
+  socket: Socket,
+) => {
+  const room = rooms[roomId];
+  if (!room) return;
+
+  const playerIndex = room.players.findIndex((p) => p.playerId === playerId);
+
+  if (playerIndex !== -1) {
+    room.players[playerIndex].socketId = socket.id;
+  }
+
+  socket.join(roomId);
+
+  socket.emit("room-update", room);
 };
