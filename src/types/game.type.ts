@@ -23,7 +23,7 @@ export type GamePhase =
 
 // PLAYER
 export type Player = {
-  id: string;
+  playerId: string;
   socketId: string;
   name: string;
   host: boolean;
