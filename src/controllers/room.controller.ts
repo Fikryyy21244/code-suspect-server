@@ -1,6 +1,10 @@
 import { Server, Socket } from "socket.io";
 import { rooms } from "../stores/room.store";
-import { checkRoomService, createRoomService } from "../services/room.service";
+import {
+  checkRoomService,
+  createRoomService,
+  getRoomService,
+} from "../services/room.service";
 
 export const roomController = (socket: Socket) => {
   // ====> CREATE ROOM
@@ -18,6 +22,10 @@ export const roomController = (socket: Socket) => {
 
   socket.on(
     "get-room",
-    ({ roomId, playerId }: { roomId: string; playerId: string }) => {},
+    ({ roomId, playerId }: { roomId: string; playerId: string }) => {
+      getRoomService(roomId, playerId, socket);
+    },
   );
+
+  //
 };
