@@ -33,3 +33,15 @@ export const createRoomService = (
     players: rooms[roomId],
   });
 };
+
+export const checkRoomService = (roomId: string, socket: Socket) => {
+  if (!rooms[roomId]) {
+    socket.emit("room-not-found", {
+      message: `Room with roomId ${roomId} not found`,
+    });
+  }
+
+  socket.emit("room-is-found", {
+    message: `Room with roomId ${roomId} is found`,
+  });
+};
