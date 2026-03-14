@@ -1,0 +1,35 @@
+import { Socket } from "socket.io";
+import { generateRoomId } from "../utils/generateRoomId";
+import { rooms } from "../stores/room.store";
+import { PLAYER_COLORS } from "../utils/playerColors";
+
+// ==== > CREATE ROOM
+export const createRoomService = (
+  socket: Socket,
+  playerName: string,
+  playerId: string,
+) => {
+  const roomId = generateRoomId();
+
+  socket.join(roomId);
+
+  rooms[roomId] = {
+    players: [
+      {
+        playerId,
+        socketId: socket.id,
+        name: playerName,
+        color: PLAYER_COLORS[0],
+        host: true,
+        isAlive: true,
+        isReady: false,
+      },
+    ],
+    gamePhase: "lobby",
+  };
+
+  socket.emit("room-created", {
+    roomId,
+    players: rooms[roomId],
+  });
+};
